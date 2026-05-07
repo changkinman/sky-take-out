@@ -32,11 +32,16 @@
 
 ---
 
-## 🏗️ 核心模块职责
-项目采用多模块 Maven 组织架构：
-- **`sky-common`**: 存放常量、异常、工具类、配置属性。
-- **`sky-pojo`**: 存放实体类 (Entity)、传参对象 (DTO)、视图对象 (VO)。
-- **`sky-server`**: 核心业务实现（Controller, Service, Mapper）。
+## 🏗️ 项目目录结构
+项目采用全栈式目录管理规范：
+- **`backend/`**: 后端 Java 工程根目录 (Maven 多模块)。
+  - `sky-common`: 存放常量、异常、工具类、配置属性。
+  - `sky-pojo`: 存放实体类 (Entity)、传参对象 (DTO)、视图对象 (VO)。
+  - `sky-server`: 核心业务实现（Controller, Service, Mapper）。
+- **`frontend/`**: 前端工程根目录。
+  - `admin-web`: 管理端 Vue 项目 (需手动放入)。
+  - `mp-weixin`: 微信小程序项目 (需手动放入)。
+- **`docs/`**: 全局设计文档与 SQL 脚本。
 
 ---
 
