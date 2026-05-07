@@ -6,4 +6,5 @@ public class OrderBusinessException extends BaseException {
         super(msg);
     }
 
+
 }
