@@ -206,11 +206,11 @@ export default class extends Vue {
   font-weight: 500;
   color: #333333;
   // background: #09a57a;
-  background-color: #ffc200;
+  background-color: #1DC779;
   &:hover,
   &:focus {
     // background: #09a57a;
-    background-color: #ffc200;
+    background-color: #1DC779;
     color: #ffffff;
   }
 }

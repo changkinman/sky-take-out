@@ -89,7 +89,7 @@ export default class extends Vue {
       }
       &:active {
         background-color: #fffbf0;
-        color: #ffc200;
+        color: #1DC779;
       }
     }
     .none {
