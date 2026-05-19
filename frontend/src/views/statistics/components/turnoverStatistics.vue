@@ -104,7 +104,7 @@ export default class extends Vue {
             emphasis: {
               color: '#fff',
               borderWidth: 5,
-              borderColor: '#1DC779',
+              borderColor: '#419EFF',
             },
           },
 

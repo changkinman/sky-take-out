@@ -308,7 +308,8 @@ export default class extends Vue {
   height: 60px;
   // overflow: hidden;
   position: relative;
-  background: #1DC779;
+  background: #ffffff;
+  border-bottom: 1px solid #eef1f6;
 
   // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   .statusBox {
@@ -432,7 +433,8 @@ export default class extends Vue {
 
     .el-button--primary {
       // height: 32px;
-      background: rgba(255, 255, 255, 0.52);
+      background: #f4f4f5;
+      color: #333333 !important;
       border-radius: 4px;
       padding-top: 0px;
       padding-bottom: 0px;
@@ -446,7 +448,7 @@ export default class extends Vue {
       height: 32px;
       line-height: 32px;
       &.active {
-        background: rgba(250, 250, 250, 0);
+        background: #e4e4e7;
         border: 0 none;
         .el-icon-arrow-down {
           transform: rotate(-180deg);
@@ -544,7 +546,7 @@ export default class extends Vue {
     }
     .el-radio-group {
       & > .is-checked {
-        border: 1px solid #1DC779;
+        border: 1px solid #419EFF;
       }
     }
     .el-radio {

@@ -110,21 +110,25 @@
 
 //按钮的背景色设置
 .el-button--primary {
-  color: #333333;
-  background: #1DC779;
-  border-color: #1DC779;
+  color: #ffffff !important;
+  background: #419EFF !important;
+  border-color: #419EFF !important;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .el-button--primary:hover {
-  background: #18A058;
-  border-color: #18A058;
-  color: #333333;
+  background: #66b1ff !important;
+  border-color: #66b1ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(65, 158, 255, 0.25);
 }
 
 .el-button--primary:active {
-  background: #128247;
-  border-color: #128247;
-  color: #333333;
+  background: #3a8ee6 !important;
+  border-color: #3a8ee6 !important;
+  color: #ffffff !important;
 }
 
 .el-button--text {
