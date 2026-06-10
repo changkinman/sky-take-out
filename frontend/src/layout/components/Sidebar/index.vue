@@ -143,7 +143,7 @@ export default class extends Vue {
   border-right: 1px solid #eef1f6;
   img {
     display: block;
-    filter: invert(0.85) contrast(1.5) brightness(0.9);
+    /* filter: invert(0.85) contrast(1.5) brightness(0.9); */
   }
 }
 .sidebar-logo-mini {
@@ -155,7 +155,7 @@ export default class extends Vue {
   img {
     width: 30px;
     height: 30px;
-    filter: invert(0.85) contrast(1.5) brightness(0.9);
+    /* filter: invert(0.85) contrast(1.5) brightness(0.9); */
   }
 }
 .el-scrollbar {

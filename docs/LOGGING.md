@@ -1,4 +1,4 @@
-# 苍穹外卖 - 日志规范与接口响应文档
+# 珞珈外卖 - 日志规范与接口响应文档
 
 ## 一、 统一接口响应标准 (Response Signal)
 
@@ -58,8 +58,8 @@
 
 ### 2. 输出位置
 - **控制台**: 实时查看 SQL 及异常堆栈。
-- **本地文件**: `logs/sky.log` (包含 info 级别以上日志)。
-- **错误文件**: `logs/sky_error.log` (仅包含 error 级别日志)。
+- **本地文件**: `logs/luojia.log` (包含 info 级别以上日志)。
+- **错误文件**: `logs/luojia_error.log` (仅包含 error 级别日志)。
 
 ---
 

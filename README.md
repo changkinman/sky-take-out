@@ -1,11 +1,11 @@
-# 苍穹外卖 (Sky Take-out)
+# 珞珈外卖 (Luojia Take-out)
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![MyBatis](https://img.shields.io/badge/MyBatis-2.2.0-blue.svg)](https://blog.mybatis.org/)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-blue.svg)](https://www.mysql.com/)
 [![Redis](https://img.shields.io/badge/Redis-3.0%2B-red.svg)](https://redis.io/)
 
-**苍穹外卖** 是一套专为餐饮企业定制的数字化运营解决方案。项目基于前后端分离架构，涵盖了从管理端到小程序端的全流程业务闭环。
+**珞珈外卖** 是一套专为餐饮企业定制的数字化运营解决方案。项目基于前后端分离架构，涵盖了从管理端到小程序端的全流程业务闭环。
 
 ---
 
@@ -35,12 +35,12 @@
 ## 🏗️ 项目目录结构
 项目采用全栈式目录管理规范：
 - **`backend/`**: 后端 Java 工程根目录 (Maven 多模块)。
-  - `sky-common`: 存放常量、异常、工具类、配置属性。
-  - `sky-pojo`: 存放实体类 (Entity)、传参对象 (DTO)、视图对象 (VO)。
-  - `sky-server`: 核心业务实现（Controller, Service, Mapper）。
+  - `luojia-common`: 存放常量、异常、工具类、配置属性。
+  - `luojia-pojo`: 存放实体类 (Entity)、传参对象 (DTO)、视图对象 (VO)。
+  - `luojia-server`: 核心业务实现（Controller, Service, Mapper）。
 - **`frontend/`**: 前端工程根目录。
-  - `admin-web`: 管理端 Vue 项目 (需手动放入)。
-  - `mp-weixin`: 微信小程序项目 (需手动放入)。
+  - `admin-web`: 管理端 Vue 项目。
+  - `mp-weixin`: 微信小程序项目。
 - **`docs/`**: 全局设计文档与 SQL 脚本。
 
 ---
