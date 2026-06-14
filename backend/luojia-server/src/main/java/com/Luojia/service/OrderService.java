@@ -2,6 +2,7 @@ package com.Luojia.service;
 
 import com.Luojia.dto.*;
 import com.Luojia.result.PageResult;
+import com.Luojia.vo.OrderPaymentVO;
 import com.Luojia.vo.OrderStatisticsVO;
 import com.Luojia.vo.OrderSubmitVO;
 import com.Luojia.vo.OrderVO;
@@ -14,6 +15,19 @@ public interface OrderService {
      * @return
      */
     OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO);
+
+    /**
+     * 订单支付
+     * @param ordersPaymentDTO
+     * @return
+     */
+    OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception;
+
+    /**
+     * 支付成功，修改订单状态
+     * @param outTradeNo
+     */
+    void paySuccess(String outTradeNo);
 
     /**
      * 历史商品分页查询
@@ -86,4 +100,10 @@ public interface OrderService {
      * @param id
      */
     void complete(Long id);
+
+    /**
+     * 客户催单
+     * @param id
+     */
+    void reminder(Long id);
 }
