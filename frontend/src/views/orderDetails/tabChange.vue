@@ -26,7 +26,11 @@ import { getOrderDetailPage } from '@/api/order'
 export default class extends Vue {
   @Prop({ default: '' }) orderStatics: any
   @Prop({ default: '' }) defaultActivity: any
-  private activeIndex: number = this.defaultActivity || 0
+  private activeIndex: number = 0
+
+  created() {
+    this.activeIndex = this.defaultActivity || 0
+  }
 
   @Watch('defaultActivity')
   private onChange(val) {
@@ -109,7 +113,7 @@ export default class extends Vue {
     }
   }
   .active {
-    background-color: #ffc200;
+    background-color: #419EFF;
     font-weight: bold;
   }
   .tab-item:first-child {

@@ -27,7 +27,7 @@ export default {
 		// }
 		ht: function () {
 			let res = uni.getMenuButtonBoundingClientRect() 
-			return res.top +5
+			return (res ? res.top : 24) + 5
 		}
 	},
 	methods: {

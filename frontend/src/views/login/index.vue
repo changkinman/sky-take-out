@@ -7,10 +7,10 @@
           <div class="login-form-title">
             <img
               src="@/assets/login/icon_logo.png"
-              style="width: 149px; height: 38px"
+              style="width: 200px; height: 56px"
               alt=""
             />
-            <!-- <span class="title-label">苍穹外卖</span> -->
+            <!-- <span class="title-label">珞珈外卖</span> -->
           </div>
           <el-form-item prop="username">
             <el-input
@@ -129,13 +129,14 @@ export default class extends Vue {
 }
 
 .login-box {
-  width: 1000px;
-  height: 474.38px;
-  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
   display: flex;
   img {
     width: 60%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -153,8 +154,8 @@ export default class extends Vue {
   justify-content: center;
   align-items: center;
   .el-form {
-    width: 214px;
-    height: 307px;
+    width: 360px;
+    height: auto;
   }
   .el-form-item {
     margin-bottom: 30px;
@@ -165,61 +166,62 @@ export default class extends Vue {
     background: #fff !important;
   }
   .input-icon {
-    height: 32px;
-    width: 18px;
+    height: 48px;
+    width: 22px;
     margin-left: -2px;
   }
   .el-input__inner {
     border: 0;
     border-bottom: 1px solid #e9e9e8;
     border-radius: 0;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 400;
     color: #333333;
-    height: 32px;
-    line-height: 32px;
+    height: 48px;
+    line-height: 48px;
   }
   .el-input__prefix {
     left: 0;
   }
   .el-input--prefix .el-input__inner {
-    padding-left: 26px;
+    padding-left: 32px;
   }
   .el-input__inner::placeholder {
     color: #aeb5c4;
   }
   .el-form-item--medium .el-form-item__content {
-    line-height: 32px;
+    line-height: 48px;
   }
   .el-input--medium .el-input__icon {
-    line-height: 32px;
+    line-height: 48px;
+    font-size: 18px;
   }
 }
 
 .login-btn {
-  border-radius: 17px;
-  padding: 11px 20px !important;
+  border-radius: 24px;
+  padding: 13px 20px !important;
   margin-top: 10px;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 16px;
   border: 0;
-  font-weight: 500;
   color: #333333;
   // background: #09a57a;
-  background-color: #ffc200;
+  background-color: #419EFF;
+  height: 48px;
   &:hover,
   &:focus {
     // background: #09a57a;
-    background-color: #ffc200;
+    background-color: #419EFF;
     color: #ffffff;
   }
 }
 .login-form-title {
-  height: 36px;
+  height: 72px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   .title-label {
     font-weight: 500;
     font-size: 20px;

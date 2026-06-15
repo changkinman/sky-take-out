@@ -1,7 +1,7 @@
 <!--拨打电话-->
 <template>
   <view class="container phoneCon">
-    <uni-popup ref="popup" @change="change" class="popupBox">
+    <uni-popup ref="popup" class="popupBox">
       <view class="popup-content">
         <view>{{ phoneData }}</view>
         <view @click="call">呼叫</view>

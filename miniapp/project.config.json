@@ -5,7 +5,7 @@
     "include": []
   },
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": true,
     "enhance": false,
     "postcss": true,
@@ -41,7 +41,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.17.0",
-  "appid": "wx95b5dc2ea8b5ee09",
+  "appid": "wx48e543a0da2b9eeb",
   "projectname": "sky-take-out-user-mp",
   "editorSetting": {
     "tabIndent": "insertSpaces",

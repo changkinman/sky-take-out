@@ -28,7 +28,11 @@ const store = new Vuex.Store({
 			state.storeInfo = provider
 		},
 		setShopInfo(state, provider) {
-			state.shopInfo = provider
+			state.shopInfo = {
+				shopName: (provider && provider.shopName) || '珞珈外卖',
+				shopAddress: (provider && provider.shopAddress) || '',
+				shopId: (provider && provider.shopId) || '',
+			}
 		},
 		initdishListMut(state, provider) {
 			state.orderListData = provider
@@ -74,7 +78,7 @@ const store = new Vuex.Store({
 		},
 		// 保存配送费
 		setDeliveryFee(state, deliveryFee) {
-			state.deliveryFee = deliveryFee
+			state.deliveryFee = (deliveryFee !== undefined && deliveryFee !== null) ? deliveryFee : 0
 		},
 		// 设置性别
 		setGender(state, gender) {

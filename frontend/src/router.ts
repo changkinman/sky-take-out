@@ -99,11 +99,20 @@ const router = new Router({
         },
         
         {
-          path: "category",
+          path: "dish-category",
           component: () =>
-            import(/* webpackChunkName: "shopTable" */ "@/views/category/index.vue"),
+            import(/* webpackChunkName: "shopTable" */ "@/views/category/dish-category.vue"),
           meta: {
-            title: "分类管理",
+            title: "菜品分类",
+            icon: "icon-category"
+          }
+        },
+        {
+          path: "setmeal-category",
+          component: () =>
+            import(/* webpackChunkName: "shopTable" */ "@/views/category/setmeal-category.vue"),
+          meta: {
+            title: "套餐分类",
             icon: "icon-category"
           }
         },

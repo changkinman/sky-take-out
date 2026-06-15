@@ -8,18 +8,19 @@
         <groupId>org.springframework.boot</groupId>
         <version>2.7.3</version>
     </parent>
-    <groupId>com.sky</groupId>
-    <artifactId>sky-take-out</artifactId>
+    <groupId>com.Luojia</groupId>
+    <artifactId>luojia-take-out</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>sky-common</module>
-        <module>sky-pojo</module>
-        <module>sky-server</module>
+        <module>luojia-common</module>
+        <module>luojia-pojo</module>
+        <module>luojia-server</module>
     </modules>
     <properties>
+        <java.version>17</java.version>
         <mybatis.spring>2.2.0</mybatis.spring>
-        <lombok>1.18.20</lombok>
+        <lombok>1.18.30</lombok>
         <fastjson>1.2.76</fastjson>
         <commons.lang>2.6</commons.lang>
         <druid>1.2.1</druid>
@@ -30,6 +31,8 @@
         <jjwt>0.9.1</jjwt>
         <jaxb-api>2.3.1</jaxb-api>
         <poi>3.16</poi>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -124,4 +127,24 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

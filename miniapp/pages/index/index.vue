@@ -14,7 +14,7 @@
             </view>
             <view class="info_top_right">
               <view class="right_title">
-                <text>苍穹外卖</text>
+                <text>珞珈外卖</text>
                 <view class="businessStatus" v-if="shopStatus === 1">营业中</view>
                 <view class="businessStatus close" v-else>休息中</view>
               </view>
@@ -30,7 +30,7 @@
           <!-- 下部---信息简介 -->
           <view class="info_bottom">
             <view>
-              <view class="word">苍穹餐厅为顾客打造专业的大众化美食外送餐饮</view>
+              <view class="word">珞珈餐厅为顾客打造专业的大众化美食外送餐饮</view>
               <view class="address">
                 <icon></icon>
                 {{ shopInfo().shopAddress || "商家店铺获取中.." }}
@@ -71,7 +71,7 @@
               <view class="dish_label" @click="openDetailHandle(item)">{{
                 item.description || item.name
               }}</view>
-              <view class="dish_label" @click="openDetailHandle(item)">月销量0</view>
+              <view class="dish_label" @click="openDetailHandle(item)">月销量{{ item.monthSales || 0 }}</view>
               <view class="dish_price">
                 <text class="ico">￥</text>
                 {{ item.price.toFixed(2) }}
@@ -97,7 +97,7 @@
           <view v-if="typeListData.length > 0">该分类下暂无菜品</view>
         </view>
       </view>
-      <view class="restaurant_close">店铺已打烊</view>
+      <view class="restaurant_close" v-if="shopStatus === 0">店铺已打烊</view>
       <!-- end -->
       <view class="mask-box"></view>
       <!-- 底部去结算 -->

@@ -187,7 +187,7 @@ export default {
   computed: {
     // 万先生
     cryptoName() {
-      if (this.$store.state.gender === 0) {
+      if (Number(this.$store.state.gender) === 0) {
         // 男
         return this.nickName.charAt(0) + "先生";
       } else {

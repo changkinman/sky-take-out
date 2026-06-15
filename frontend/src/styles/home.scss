@@ -51,7 +51,7 @@ li {
 
       .active {
         height: 38px;
-        background: #ffc200;
+        background: #419EFF;
       }
     }
   }
@@ -155,10 +155,18 @@ li {
 
     li {
       flex: 1;
-      background: #fffbf0;
-      border-radius: 4px;
+      background: #F3F7FC;
+      border: 1px solid #DCE6F2;
+      border-radius: 6px;
       margin-left: 20px;
       padding: 20px;
+      box-shadow: 0 2px 6px rgba(65, 158, 255, 0.03);
+      transition: all 0.25s ease;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(65, 158, 255, 0.08);
+        border-color: #419EFF;
+      }
     }
 
     .tit {
@@ -329,24 +337,40 @@ li {
 
     li {
       flex: 1;
-      background: #fffbf0;
-      border-radius: 4px;
+      background: #F3F7FC;
+      border: 1px solid #DCE6F2;
+      border-radius: 6px;
       margin-left: 20px;
       padding:20px;
       font-size: 14px;
       line-height: 36px;
       color: #333;
+      box-shadow: 0 2px 6px rgba(65, 158, 255, 0.03);
+      transition: all 0.25s ease;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(65, 158, 255, 0.08);
+        border-color: #419EFF;
+      }
       &.add {
         width: 100px;
         flex: none;
-        background: #FFC100;
-        border-radius: 4px;
+        background: #F3F7FC;
+        border: 1px dashed #b0d4f5;
+        border-radius: 6px;
         text-align: center;
-        color: #333;
         padding: 18px 20px 10px;
+        transition: all 0.25s ease;
+
+        a {
+          color: #419EFF !important;
+          text-decoration: none;
+        }
 
         p {
           line-height: 20px;
+          color: #419EFF;
+          font-weight: 500;
         }
 
         i {
@@ -357,6 +381,15 @@ li {
           background: url(../../src/assets/icons/btn_add@2x.png) no-repeat;
           background-size: contain;
           margin-bottom: 5px;
+          // Modern filter to make the icon blue to match text
+          filter: invert(51%) sepia(87%) saturate(1637%) hue-rotate(189deg) brightness(101%) contrast(101%);
+        }
+
+        &:hover {
+          background: #EBF3FC;
+          border: 1px solid #419EFF;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(65, 158, 255, 0.12);
         }
       }
     }
@@ -448,7 +481,8 @@ li {
     cursor: pointer;
 
     &.active {
-      background: #FFC200;
+      background: #419EFF;
+      color: #ffffff !important;
     }
   }
 
@@ -635,7 +669,7 @@ display: -webkit-box;
     }
     &.one{
       span{
-        background:#FFC100 ;
+        background:#419EFF ;
       }
 
    }

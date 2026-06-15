@@ -4,7 +4,7 @@ import popMask from "./components/popMask.vue" //规格
 import popCart from "./components/popCart.vue" //购物车弹出层
 import dishDetail from "./components/dishDetail.vue" //菜品详情
 import {
-	// 苍穹外卖相关的接口
+	// 珞珈外卖相关的接口
 	userLogin,
 	getCategoryList,
 	dishListByCategoryId,
@@ -178,6 +178,36 @@ export default {
 				})
 			})
 		},
+		loginWithMock() {
+			let _this = this
+			_this.setBaseUserInfo({
+				avatarUrl: "../../static/btn_waiter_sel.png",
+				nickName: "开发测试用户",
+				gender: "0"
+			})
+			const params = {
+				code: "mock_code_dev",
+				location: `116.481488,39.990464`
+			}
+			userLogin(params)
+				.then((success) => {
+					if (success.code === 1) {
+						_this.setToken(success.data.token)
+						_this.setDeliveryFee(success.data.deliveryFee)
+						_this.setShopInfo({
+							shopName: success.data.shopName,
+							shopAddress: success.data.shopAddress,
+							shopId: success.data.shopId,
+						})
+						_this.init()
+					} else {
+						console.error("Mock backend userLogin code != 1:", success)
+					}
+				})
+				.catch((err) => {
+					console.error("Mock backend userLogin fail:", err)
+				})
+		},
 		// 获取用户信息
 		getData() {
 			let res = wx.getMenuButtonBoundingClientRect()
@@ -216,37 +246,40 @@ export default {
 									}).then(([err, result]) => {
 										if (err) {
 											uni.showToast({
-												title: "获取地理位置失败",
+												title: "获取定位失败，使用默认坐标登录",
 												icon: "none"
 											})
+											params.location = `116.481488,39.990464`
 										} else {
 											if (process.env.NODE_ENV === '"development"') {
 												params.location = `116.481488,39.990464`//	先写死在北京
 											} else {
 												params.location = `${result.longitude},${result.latitude}`
 											}
-
-											userLogin(params)
-												.then((success) => {
-													if (success.code === 1) {
-														_this.setToken(success.data.token)
-														// 保存配送费
-														_this.setDeliveryFee(success.data.deliveryFee)
-														// 保存商铺信息
-														_this.setShopInfo({
-															shopName: success.data.shopName,
-															shopAddress: success.data.shopAddress,
-															shopId: success.data.shopId,
-														})
-														_this.init()
-													}
-												})
-												.catch((err) => { })
-
-
-
 										}
 
+										userLogin(params)
+											.then((success) => {
+												if (success.code === 1) {
+													_this.setToken(success.data.token)
+													// 保存配送费
+													_this.setDeliveryFee(success.data.deliveryFee)
+													// 保存商铺信息
+													_this.setShopInfo({
+														shopName: success.data.shopName,
+														shopAddress: success.data.shopAddress,
+														shopId: success.data.shopId,
+													})
+													_this.init()
+												} else {
+													console.error("微信登录失败，尝试使用开发测试模式登录...")
+													_this.loginWithMock()
+												}
+											})
+											.catch((err) => {
+												console.error("微信登录异常，尝试使用开发测试模式登录...")
+												_this.loginWithMock()
+											})
 									})
 
 								},
@@ -436,6 +469,10 @@ export default {
 		},
 		// 加菜 - 添加菜品
 		async addDishAction(item, form) {
+			if (item && item.obj) {
+				form = item.item
+				item = item.obj
+			}
 			// 规格
 			if (
 				this.openMoreNormPop &&
@@ -450,7 +487,9 @@ export default {
 			this.openMoreNormPop = false
 			// 实时更新obj.newCardNumber新添加的字段----加入购物车数量number
 			this.tablewareNumber++
-			this.dishDetailes.dishNumber++
+			if (item && this.dishDetailes && (item.id === this.dishDetailes.id || item.dishId === this.dishDetailes.id)) {
+				this.dishDetailes.dishNumber++
+			}
 			if (
 				this.orderListDataes &&
 				!this.orderListDataes.some((n) => n.id == item.dishId) &&
@@ -515,9 +554,15 @@ export default {
 		},
 		// 减菜 - 添加菜品
 		async redDishAction(item, form) {
+			if (item && item.obj) {
+				form = item.item
+				item = item.obj
+			}
 			// 实时更新obj.newCardNumber新添加的字段----加入购物车数量number
 			this.tablewareNumber--
-			this.dishDetailes.dishNumber--
+			if (item && this.dishDetailes && (item.id === this.dishDetailes.id || item.dishId === this.dishDetailes.id || item.setmealId === this.dishDetailes.id)) {
+				this.dishDetailes.dishNumber--
+			}
 			let dishFlavorDatas = ""
 			let flavorRemark = []
 			if (item.flavorRemark) {
@@ -610,29 +655,32 @@ export default {
 				...obj,
 				value: JSON.parse(obj.value),
 			}))
+			// 本地开发测试优化：不默认勾选第一个口味选项（例如“不要葱”），让忌口规格在打开时默认为未选中状态
+			/*
 			this.moreNormdata.forEach((item) => {
 				if (item.value && item.value.length > 0) {
 					this.flavorDataes.push(item.value[0])
 				}
 			})
+			*/
 		},
-		// 选规格 处理一行只能选择一种
+		// 选规格 处理一行为可选/互斥
 		checkMoreNormPop(val) {
 			let obj = val.obj
 			let item = val.item
-			let ind
-			let findst = obj.some((n) => {
-				ind = this.flavorDataes.findIndex((o) => o == n)
-				return ind != -1
-			})
 			const num = this.flavorDataes.findIndex((it) => it == item)
-			if (num == -1 && !findst) {
-				this.flavorDataes.push(item)
-			} else if (findst) {
-				this.flavorDataes.splice(ind, 1)
-				this.flavorDataes.push(item)
-			} else {
+			if (num != -1) {
+				// 如果已选中，再次点击则取消选中（反选）
 				this.flavorDataes.splice(num, 1)
+			} else {
+				// 如果未选中，先清除当前规格行已选的其他项，再选中当前项
+				obj.forEach((n) => {
+					let ind = this.flavorDataes.findIndex((o) => o == n)
+					if (ind != -1) {
+						this.flavorDataes.splice(ind, 1)
+					}
+				})
+				this.flavorDataes.push(item)
 			}
 		},
 		// 关闭选规格弹窗

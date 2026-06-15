@@ -97,6 +97,14 @@ export default {
         };
         paymentOrder(params).then(async (res) => {
           if (res.code === 1) {
+            // 本地开发测试模式：跳过真实的微信支付发起，直接模拟支付成功
+            await uni.showToast({ title: "模拟支付成功", icon: "success" });
+            setTimeout(() => {
+              uni.redirectTo({
+                url: "/pages/success/index?orderId=" + this.orderId,
+              });
+            }, 1500);
+            /*
             const [err, payRes] = await uni.requestPayment({
               ...res.data,
               package: res.data.packageStr, // package 为微信支付必须的字段
@@ -119,6 +127,7 @@ export default {
                 });
               }, 1500);
             }
+            */
           } else {
             uni.showToast({
               title: res.msg,

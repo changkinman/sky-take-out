@@ -3,7 +3,8 @@ import {
 	submitOrderSubmit,
 	// 查询默认地址
 	getAddressBookDefault,
-	queryAddressBookList, getEstimatedDeliveryTime
+	queryAddressBookList, getEstimatedDeliveryTime,
+	getShoppingCartList
 } from '../api/api.js'
 import {
 	mapState,
@@ -171,10 +172,25 @@ export default {
 	},
 	methods: {
 		...mapState(['orderListData', 'remarkData', 'addressData', 'storeInfo', 'shopInfo', 'deliveryFee']),
-		...mapMutations(['setAddressBackUrl', 'setOrderData', 'setArrivalTime', 'setRemark', 'setGender']),
+		...mapMutations(['setAddressBackUrl', 'setOrderData', 'setArrivalTime', 'setRemark', 'setGender', 'initdishListMut']),
 		init() {
-			this.computOrderInfo()
-
+			getShoppingCartList({}).then(res => {
+				if (res.code === 1) {
+					this.initdishListMut(res.data)
+					this.computOrderInfo()
+					if (!res.data || res.data.length === 0) {
+						uni.showToast({
+							title: '购物车为空，请重新选择菜品',
+							icon: 'none',
+						})
+						setTimeout(() => {
+							uni.redirectTo({
+								url: '/pages/index/index'
+							})
+						}, 1500)
+					}
+				}
+			})
 		},
 		initPlatform() {
 			const res = uni.getSystemInfoSync()
@@ -182,13 +198,28 @@ export default {
 		},
 		// 获取用户送餐期望时间
 		async getEstimatedDeliveryTime() {
-			const result = await getEstimatedDeliveryTime({ shopId: this.shopInfo().shopId, customerAddress: this.address });
-			this.arrivalTime = dayjs(result.data).format('HH:mm')
-			this.orderTime = result.data
+			try {
+				const result = await getEstimatedDeliveryTime({ shopId: this.shopInfo().shopId, customerAddress: this.address });
+				if (result && result.code === 1 && result.data) {
+					this.arrivalTime = dayjs(result.data).format('HH:mm')
+					this.orderTime = result.data
+				} else {
+					const defaultTime = dayjs().add(30, 'minute')
+					this.arrivalTime = defaultTime.format('HH:mm')
+					this.orderTime = defaultTime.format('YYYY-MM-DD HH:mm:ss')
+				}
+			} catch (e) {
+				const defaultTime = dayjs().add(30, 'minute')
+				this.arrivalTime = defaultTime.format('HH:mm')
+				this.orderTime = defaultTime.format('YYYY-MM-DD HH:mm:ss')
+			}
 		},
 		// 根据系统派送时间 格式化时间  [16:00,16:30]
 		getDateDate() {
 			let currentDayjs = dayjs(this.orderTime);
+			if (!currentDayjs.isValid()) {
+				currentDayjs = dayjs().add(30, 'minute');
+			}
 			const list = ['立即派送']
 			if (!(currentDayjs.hour() >= 22 && currentDayjs.minute() > 30)) {
 				if (currentDayjs.minute() > 30) {
@@ -196,7 +227,8 @@ export default {
 				} else {
 					currentDayjs = currentDayjs.set('minute', 30)
 				}
-				while (true) {
+				let count = 0
+				while (count++ < 100) {
 					if (currentDayjs.hour() === 23 && currentDayjs.minute() === 30) {
 						break
 					}
@@ -308,11 +340,18 @@ export default {
 						url: '/pages/pay/index?orderId=' + res.data.id
 					})
 				} else {
+					this.isHandlePy = false
 					uni.showToast({
 						title: res.msg || '操作失败',
 						icon: 'none',
 					})
 				}
+			}).catch(err => {
+				this.isHandlePy = false
+				uni.showToast({
+					title: (err && err.msg) || '请求出错',
+					icon: 'none',
+				})
 			})
 		},
 		// 拨打电话

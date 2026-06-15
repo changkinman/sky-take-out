@@ -134,18 +134,28 @@ export default class extends Vue {
 
 <style lang="scss" scoped>
 .logo {
-  text-align: center;
-  background-color: #ffc100;
-  padding: 15px 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
   height: 60px;
+  border-bottom: 1px solid #eef1f6;
+  border-right: 1px solid #eef1f6;
   img {
-    display: inline-block;
+    display: block;
+    /* filter: invert(0.85) contrast(1.5) brightness(0.9); */
   }
 }
 .sidebar-logo-mini {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   img {
     width: 30px;
     height: 30px;
+    /* filter: invert(0.85) contrast(1.5) brightness(0.9); */
   }
 }
 .el-scrollbar {

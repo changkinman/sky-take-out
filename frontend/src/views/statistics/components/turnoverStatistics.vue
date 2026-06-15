@@ -90,8 +90,7 @@ export default class extends Vue {
           name: '营业额',
           type: 'line',
           // stack: 'Total',
-          smooth: false, //否平滑曲线
-          showSymbol: false, //未显示鼠标上移的圆点
+          showSymbol: this.turnoverdata.dateList && this.turnoverdata.dateList.length === 1, // 只有单天数据时显示圆点，避免图表空白
           symbolSize: 10,
           // symbol:"circle", //设置折线点定位实心点
           itemStyle: {
@@ -104,7 +103,7 @@ export default class extends Vue {
             emphasis: {
               color: '#fff',
               borderWidth: 5,
-              borderColor: '#FFC100',
+              borderColor: '#419EFF',
             },
           },
 
