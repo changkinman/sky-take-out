@@ -202,7 +202,7 @@ export default {
 			// 暂时关闭打电话
 			this.$refs.phone.open(type)
 
-			this.phone = phone;
+			this.phone = phone || this.orderDetailsData.shopTelephone || (this.shopPhone && (this.shopPhone.phone || this.shopPhone)) || '13800138000';
 		},
 		// 关闭弹层
 		closePopup(type) {

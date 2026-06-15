@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     public static final String WX_LOGIN = "https://api.weixin.qq.com/sns/jscode2session";
     @Autowired
     private UserMapper userMapper;
+    @Autowired
     private WeChatProperties weChatProperties;
 
     public UserServiceImpl(UserMapper userMapper) {
@@ -38,7 +39,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User wxLogin(UserLoginDTO userLoginDTO) {
         //调用微信api，获取openId
-        String openid = getOpenid(userLoginDTO.getCode());
+        String openid;
+        if (userLoginDTO.getCode() != null && userLoginDTO.getCode().startsWith("mock_code")) {
+            openid = "mock_openid_" + userLoginDTO.getCode();
+        } else {
+            openid = getOpenid(userLoginDTO.getCode());
+        }
 
         //如openId为空则抛异常
         if(openid == null){

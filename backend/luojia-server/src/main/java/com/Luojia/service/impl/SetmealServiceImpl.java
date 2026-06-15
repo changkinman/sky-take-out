@@ -28,6 +28,8 @@ public class SetmealServiceImpl implements SetmealService {
     SetmealMapper setmealMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private com.Luojia.mapper.OrderMapper orderMapper;
 
     /**
      * 新增套餐
@@ -125,6 +127,12 @@ public class SetmealServiceImpl implements SetmealService {
      */
     public List<Setmeal> list(Setmeal setmeal) {
         List<Setmeal> list = setmealMapper.list(setmeal);
+        if (list != null) {
+            for (Setmeal s : list) {
+                Integer sales = orderMapper.getMonthSalesBySetmealId(s.getId());
+                s.setMonthSales(sales != null ? sales : 0);
+            }
+        }
         return list;
     }
 

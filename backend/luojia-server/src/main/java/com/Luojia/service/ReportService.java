@@ -40,4 +40,10 @@ public interface ReportService {
      * @return
      */
     SalesTop10ReportVO getSalesTop10(LocalDate begin, LocalDate end);
+
+    /**
+     * 导出运营数据报表
+     * @param response
+     */
+    void exportBusinessData(javax.servlet.http.HttpServletResponse response);
 }

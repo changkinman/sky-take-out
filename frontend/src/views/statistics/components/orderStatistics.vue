@@ -127,8 +127,7 @@ export default class extends Vue {
           name: '订单总数',
           type: 'line',
           // stack: 'Total',
-          smooth: false, //否平滑曲线
-          showSymbol: false, //未显示鼠标上移的圆点
+          showSymbol: this.orderdata.data.dateList && this.orderdata.data.dateList.length === 1, // 只有单天数据时显示圆点，避免图表空白
           symbolSize: 10,
           // symbol:"circle", //设置折线点定位实心点
           itemStyle: {
@@ -151,8 +150,7 @@ export default class extends Vue {
           name: '有效订单',
           type: 'line',
           // stack: 'Total',
-          smooth: false, //否平滑曲线
-          showSymbol: false, //未显示鼠标上移的圆点
+          showSymbol: this.orderdata.data.dateList && this.orderdata.data.dateList.length === 1, // 只有单天数据时显示圆点，避免图表空白
           symbolSize: 10, //圆点大小
           // symbol:"circle", //设置折线点定位实心点
           itemStyle: {

@@ -33,6 +33,8 @@ public class DishServiceImpl implements DishService {
     DishFlavorMapper dishFlavorMapper;
     @Autowired
     SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private com.Luojia.mapper.OrderMapper orderMapper;
 
     /**
      * 添加菜品及其口味
@@ -162,6 +164,11 @@ public class DishServiceImpl implements DishService {
             List<DishFlavor> flavors = dishFlavorMapper.getByDishId(d.getId());
 
             dishVO.setFlavors(flavors);
+
+            // 查询月销量 (近30天已完成订单)
+            Integer sales = orderMapper.getMonthSalesByDishId(d.getId());
+            dishVO.setMonthSales(sales != null ? sales : 0);
+
             dishVOList.add(dishVO);
         }
 

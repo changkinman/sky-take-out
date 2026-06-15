@@ -99,7 +99,7 @@ export default {
     this.gender =
       this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.gender;
     this.phoneNumber =
-      this.$store.state.shopPhone && this.$store.state.shopPhone;
+      this.$store.state.shopPhone && (this.$store.state.shopPhone.phone || this.$store.state.shopPhone);
     this.getList();
   },
   created() {},

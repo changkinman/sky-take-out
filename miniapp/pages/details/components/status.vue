@@ -5,10 +5,10 @@
       <view class="orderInfoTip">
         <view class="tit">{{ statusWord(orderDetailsData.status) }} <text class="smw"
             v-if="timeout && orderDetailsData.status === 1"> ( 已经超时)</text></view>
-        <view class="rejectionReason" v-if="orderDetailsData.status === 7">
-          <text v-if="orderDetailsData.payStatus === 1 || orderDetailsData.payStatus === 2">退款成功</text>
-          <text v-else-if="orderDetailsData.cancelReason">{{ orderDetailsData.cancelReason }}</text>
-          <text v-else-if="orderDetailsData.rejectionReason">{{ orderDetailsData.rejectionReason }}</text>
+        <view class="rejectionReason" v-if="orderDetailsData.status === 6">
+          <view v-if="orderDetailsData.payStatus === 1 || orderDetailsData.payStatus === 2">退款成功</view>
+          <view v-if="orderDetailsData.cancelReason">取消原因：{{ orderDetailsData.cancelReason }}</view>
+          <view v-if="orderDetailsData.rejectionReason">拒单原因：{{ orderDetailsData.rejectionReason }}</view>
         </view>
         <view v-if="!timeout && orderDetailsData.status === 1">
           <view class="time">

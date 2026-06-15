@@ -93,4 +93,16 @@ public interface OrderMapper {
      * @return
      */
     List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 根据菜品id统计月销量（近30天已完成订单）
+     */
+    @Select("select ifnull(sum(od.number), 0) from order_detail od left join orders o on od.order_id = o.id where od.dish_id = #{dishId} and o.status = 5 and o.order_time >= date_sub(now(), interval 30 day)")
+    Integer getMonthSalesByDishId(Long dishId);
+
+    /**
+     * 根据套餐id统计月销量（近30天已完成订单）
+     */
+    @Select("select ifnull(sum(od.number), 0) from order_detail od left join orders o on od.order_id = o.id where od.setmeal_id = #{setmealId} and o.status = 5 and o.order_time >= date_sub(now(), interval 30 day)")
+    Integer getMonthSalesBySetmealId(Long setmealId);
 }

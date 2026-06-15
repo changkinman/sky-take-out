@@ -217,4 +217,149 @@ public class ReportServiceImpl implements ReportService {
                 .numberList(numberList)
                 .build();
     }
+
+    @Autowired
+    private com.Luojia.service.WorkspaceService workspaceService;
+
+    /**
+     * 导出运营数据报表
+     * @param response
+     */
+    @Override
+    public void exportBusinessData(javax.servlet.http.HttpServletResponse response) {
+        LocalDate begin = LocalDate.now().minusDays(30);
+        LocalDate end = LocalDate.now().minusDays(1);
+
+        // 1. 查询30天概览数据
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        com.Luojia.vo.BusinessDataVO businessData = workspaceService.getBusinessData(beginTime, endTime);
+
+        // 2. 动态生成 Excel
+        try (org.apache.poi.xssf.usermodel.XSSFWorkbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook();
+             javax.servlet.ServletOutputStream out = response.getOutputStream()) {
+
+            org.apache.poi.xssf.usermodel.XSSFSheet sheet = workbook.createSheet("运营数据报表");
+
+            // 列宽
+            sheet.setColumnWidth(0, 256 * 18);
+            sheet.setColumnWidth(1, 256 * 15);
+            sheet.setColumnWidth(2, 256 * 15);
+            sheet.setColumnWidth(3, 256 * 15);
+            sheet.setColumnWidth(4, 256 * 15);
+            sheet.setColumnWidth(5, 256 * 15);
+
+            // 样式
+            org.apache.poi.xssf.usermodel.XSSFCellStyle titleStyle = workbook.createCellStyle();
+            org.apache.poi.xssf.usermodel.XSSFFont titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 16);
+            titleStyle.setFont(titleFont);
+            titleStyle.setAlignment(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER);
+
+            org.apache.poi.xssf.usermodel.XSSFCellStyle headerStyle = workbook.createCellStyle();
+            org.apache.poi.xssf.usermodel.XSSFFont headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+            headerStyle.setFillForegroundColor(org.apache.poi.ss.usermodel.IndexedColors.GREY_25_PERCENT.getIndex());
+            headerStyle.setFillPattern(org.apache.poi.ss.usermodel.FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setBorderTop(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setBorderLeft(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setBorderRight(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            headerStyle.setAlignment(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER);
+
+            org.apache.poi.xssf.usermodel.XSSFCellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setBorderBottom(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            cellStyle.setBorderTop(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            cellStyle.setBorderLeft(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            cellStyle.setBorderRight(org.apache.poi.ss.usermodel.BorderStyle.THIN);
+            cellStyle.setAlignment(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER);
+
+            // 标题
+            org.apache.poi.xssf.usermodel.XSSFRow row0 = sheet.createRow(0);
+            row0.setHeightInPoints(30);
+            org.apache.poi.xssf.usermodel.XSSFCell cell0 = row0.createCell(0);
+            cell0.setCellValue("运营数据报表");
+            cell0.setCellStyle(titleStyle);
+            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0, 0, 0, 5));
+
+            // 时间范围
+            org.apache.poi.xssf.usermodel.XSSFRow row1 = sheet.createRow(1);
+            row1.createCell(0).setCellValue("时间区间：" + begin + " 至 " + end);
+            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 0, 5));
+
+            // 概览头部
+            org.apache.poi.xssf.usermodel.XSSFRow row3 = sheet.createRow(3);
+            row3.setHeightInPoints(20);
+            org.apache.poi.xssf.usermodel.XSSFCell cA = row3.createCell(0); 
+            cA.setCellValue("指标统计 (近30天)"); 
+            cA.setCellStyle(headerStyle);
+            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(3, 3, 0, 5));
+
+            org.apache.poi.xssf.usermodel.XSSFRow row4 = sheet.createRow(4);
+            String[] metricHeaders = {"营业额", "订单完成率", "新增用户数", "有效订单数", "平均客单价", "统计天数"};
+            for (int i = 0; i < 6; i++) {
+                org.apache.poi.xssf.usermodel.XSSFCell cell = row4.createCell(i);
+                cell.setCellValue(metricHeaders[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            // 概览数据
+            org.apache.poi.xssf.usermodel.XSSFRow row5 = sheet.createRow(5);
+            row5.createCell(0).setCellValue(businessData.getTurnover() != null ? businessData.getTurnover() : 0.0);
+            row5.createCell(1).setCellValue(businessData.getOrderCompletionRate() != null ? businessData.getOrderCompletionRate() : 0.0);
+            row5.createCell(2).setCellValue(businessData.getNewUsers() != null ? businessData.getNewUsers() : 0);
+            row5.createCell(3).setCellValue(businessData.getValidOrderCount() != null ? businessData.getValidOrderCount() : 0);
+            row5.createCell(4).setCellValue(businessData.getUnitPrice() != null ? businessData.getUnitPrice() : 0.0);
+            row5.createCell(5).setCellValue(30);
+            for (int i = 0; i < 6; i++) {
+                row5.getCell(i).setCellStyle(cellStyle);
+            }
+
+            // 每日明细标题
+            org.apache.poi.xssf.usermodel.XSSFRow row7 = sheet.createRow(7);
+            org.apache.poi.xssf.usermodel.XSSFCell cB = row7.createCell(0);
+            cB.setCellValue("每日明细数据");
+            cB.setCellStyle(headerStyle);
+            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(7, 7, 0, 5));
+
+            org.apache.poi.xssf.usermodel.XSSFRow row8 = sheet.createRow(8);
+            String[] detailHeaders = {"日期", "营业额", "订单完成率", "新增用户数", "有效订单数", "平均客单价"};
+            for (int i = 0; i < 6; i++) {
+                org.apache.poi.xssf.usermodel.XSSFCell cell = row8.createCell(i);
+                cell.setCellValue(detailHeaders[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            // 写入每日数据
+            int startRow = 9;
+            for (int i = 0; i < 30; i++) {
+                LocalDate date = begin.plusDays(i);
+                LocalDateTime dailyBegin = LocalDateTime.of(date, LocalTime.MIN);
+                LocalDateTime dailyEnd = LocalDateTime.of(date, LocalTime.MAX);
+                com.Luojia.vo.BusinessDataVO dailyData = workspaceService.getBusinessData(dailyBegin, dailyEnd);
+
+                org.apache.poi.xssf.usermodel.XSSFRow row = sheet.createRow(startRow + i);
+                row.createCell(0).setCellValue(date.toString());
+                row.createCell(1).setCellValue(dailyData.getTurnover() != null ? dailyData.getTurnover() : 0.0);
+                row.createCell(2).setCellValue(dailyData.getOrderCompletionRate() != null ? dailyData.getOrderCompletionRate() : 0.0);
+                row.createCell(3).setCellValue(dailyData.getNewUsers() != null ? dailyData.getNewUsers() : 0);
+                row.createCell(4).setCellValue(dailyData.getValidOrderCount() != null ? dailyData.getValidOrderCount() : 0);
+                row.createCell(5).setCellValue(dailyData.getUnitPrice() != null ? dailyData.getUnitPrice() : 0.0);
+
+                for (int j = 0; j < 6; j++) {
+                    row.getCell(j).setCellStyle(cellStyle);
+                }
+            }
+
+            // 输出
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition", "attachment; filename=OperationalReport.xlsx");
+            workbook.write(out);
+
+        } catch (Exception e) {
+            log.error("导出运营数据报表异常", e);
+        }
+    }
 }

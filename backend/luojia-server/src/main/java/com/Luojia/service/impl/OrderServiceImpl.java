@@ -63,6 +63,8 @@ public class OrderServiceImpl implements OrderService {
     private WebSocketServer webSocketServer;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private org.springframework.data.redis.core.RedisTemplate redisTemplate;
 
     /**
      * 用户下单
@@ -202,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public PageResult pageQuery4User(int pageNum, int pageSize, int status) {
+    public PageResult pageQuery4User(int pageNum, int pageSize, Integer status) {
         // 设置分页
         PageHelper.startPage(pageNum, pageSize);
 
@@ -230,7 +232,7 @@ public class OrderServiceImpl implements OrderService {
                 list.add(orderVO);
             }
         }
-        return new PageResult(page.getTotal(), list);
+        return new PageResult(page == null ? 0L : page.getTotal(), list);
     }
 
     @Override
@@ -273,12 +275,15 @@ public class OrderServiceImpl implements OrderService {
 
         // 订单处于待接单状态下取消，需要进行退款
         if (ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
-            //调用微信支付退款接口
+            //调用微信支付退款接口 (本地开发环境下Mock退款)
+            /*
             weChatPayUtil.refund(
                     ordersDB.getNumber(), //商户订单号
                     ordersDB.getNumber(), //商户退款单号
                     new BigDecimal(0.01),//退款金额，单位 元
                     new BigDecimal(0.01));//原订单金额
+            */
+            log.info("本地开发环境下模拟退款成功：{}", ordersDB.getNumber());
 
             //支付状态修改为 退款
             orders.setPayStatus(Orders.REFUND);
@@ -426,13 +431,16 @@ public class OrderServiceImpl implements OrderService {
         //支付状态
         Integer payStatus = ordersDB.getPayStatus();
         if (payStatus == Orders.PAID) {
-            //用户已支付，需要退款
+            //用户已支付，需要退款 (本地开发环境下Mock退款)
+            /*
             String refund = weChatPayUtil.refund(
                     ordersDB.getNumber(),
                     ordersDB.getNumber(),
                     new BigDecimal(0.01),
                     new BigDecimal(0.01));
             log.info("申请退款：{}", refund);
+            */
+            log.info("本地开发环境下模拟退款成功：{}", ordersDB.getNumber());
         }
 
         // 拒单需要退款，根据订单id更新订单状态、拒单原因、取消时间
@@ -457,13 +465,16 @@ public class OrderServiceImpl implements OrderService {
         //支付状态
         Integer payStatus = ordersDB.getPayStatus();
         if (payStatus == 1) {
-            //用户已支付，需要退款
+            //用户已支付，需要退款 (本地开发环境下Mock退款)
+            /*
             String refund = weChatPayUtil.refund(
                     ordersDB.getNumber(),
                     ordersDB.getNumber(),
                     new BigDecimal(0.01),
                     new BigDecimal(0.01));
             log.info("申请退款：{}", refund);
+            */
+            log.info("本地开发环境下模拟退款成功：{}", ordersDB.getNumber());
         }
 
         // 管理端取消订单需要退款，根据订单id更新订单状态、取消原因、取消时间
@@ -516,6 +527,21 @@ public class OrderServiceImpl implements OrderService {
         orders.setDeliveryTime(LocalDateTime.now());
 
         orderMapper.update(orders);
+
+        // 清理菜品和套餐缓存以刷新月销量
+        try {
+            java.util.Set<String> keys = redisTemplate.keys("dish_*");
+            if (keys != null && !keys.isEmpty()) {
+                redisTemplate.delete(keys);
+            }
+            java.util.Set<String> setmealKeys = redisTemplate.keys("setmealCache::*");
+            if (setmealKeys != null && !setmealKeys.isEmpty()) {
+                redisTemplate.delete(setmealKeys);
+            }
+            log.info("订单完成，清理菜品与套餐缓存成功");
+        } catch (Exception e) {
+            log.error("订单完成，清理菜品/套餐缓存失败: ", e);
+        }
     }
 
    /**

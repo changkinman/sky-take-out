@@ -67,10 +67,10 @@
         </where>
     </select>
 
-    <select id="getSalesTop10" resultType="com.sky.dto.GoodsSalesDTO">
+    <select id="getSalesTop10" resultType="com.Luojia.dto.GoodsSalesDTO">
         select od.name,sum(od.number) number
-        from oder_detail od,orders o
-        while od.order_id = o.id and o.status = 5
+        from order_detail od,orders o
+        where od.order_id = o.id and o.status = 5
         <if test="begin !=null">
             and o.order_time &gt; #{begin}
         </if>
